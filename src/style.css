@@ -1,0 +1,54 @@
+body {
+  background-color: rgba(146, 143, 143, 0.188);
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #fff;
+  margin: 15%;
+}
+
+img {
+  width: 2%;
+  height: 20px;
+}
+
+li,
+form,
+.title-toDo {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid rgba(146, 143, 143, 0.188);
+  padding: 2%;
+}
+
+p {
+  margin: 0;
+}
+
+input {
+  border: none;
+}
+
+#enter-icon {
+  rotate: 90deg;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: square;
+}
+
+.checkbox {
+  position: absolute;
+}
+
+button {
+  border: 1px solid rgba(146, 143, 143, 0.188);
+  padding: 2%;
+  color: darkgray;
+  font-size: medium;
+}
