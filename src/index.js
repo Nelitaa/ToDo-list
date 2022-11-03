@@ -1,27 +1,54 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable max-classes-per-file */
 import './style.css';
 
-const tasks = [
-  { description: 'wash the dishes', completed: false, index: 1 },
-  { description: 'complete T Do list project', completed: false, index: 2 },
-];
 const tasksList = document.querySelector('.tasks-list');
+const inputTask = document.querySelector('#input-task');
+class Task {
+  constructor(index, description, completed = false) {
+    this.index = index;
+    this.description = description;
+    this.completed = completed;
+  }
+}
+class Tasks {
+  constructor() {
+    this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+  }
 
-const renderOldTasks = () => {
-  for (let i = 0; i < tasks.length; i += 1) {
-    const task = document.createElement('li');
-    task.textContent = `\u00a0  \u00a0 \u00a0 ${tasks[i].description}`;
-    tasksList.appendChild(task);
+  addTask(task) {
+    this.tasks.push(task);
+  }
+
+  renderTask(task) {
+    const taskLi = document.createElement('li');
+    taskLi.textContent = `\u00a0  \u00a0 \u00a0 ${task.description}`;
+    tasksList.appendChild(taskLi);
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.className = 'checkbox';
-    checkbox.checked = tasks[i].completed;
-    task.appendChild(checkbox);
+    taskLi.appendChild(checkbox);
 
     const move = document.createElement('img');
     move.src = 'https://drive.google.com/uc?export=download&id=1sPrm0H-RE7O346HqzOGXcqp1-lyE2xC_';
-    task.appendChild(move);
+    taskLi.appendChild(move);
   }
-};
+}
+const init = () => {
+  const allTasks = new Tasks();
+  allTasks.tasks.forEach((task) => allTasks.renderTask(task));
 
-renderOldTasks();
+  inputTask.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const newTask = new Task(allTasks.tasks.length + 1, inputTask.value);
+      allTasks.addTask(newTask);
+      localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+      allTasks.renderTask(newTask);
+      inputTask.value = '';
+    }
+  });
+  };
+
+init();
