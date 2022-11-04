@@ -28,6 +28,7 @@ class Tasks {
   renderTask(task) {
     const taskLi = document.createElement('li');
     taskLi.setAttribute('index', task.index);
+    taskLi.className = 'task-item';
     tasksList.appendChild(taskLi);
 
     const taskDiv = document.createElement('div');
@@ -61,7 +62,7 @@ class Tasks {
   }
 }
 
-const allTasks = new Tasks();
+let allTasks = new Tasks();
 allTasks.renderTasks();
 
 inputTask.addEventListener('keypress', (e) => {
@@ -93,15 +94,16 @@ tasksList.addEventListener('click', (e) => {
         inputText.setAttribute('disabled', 'true');
       }
     });
-
-    tasksList.addEventListener('click', (e) => {
-      if (e.target.classList.contains('edit-task-img-trash')) {
-        const taskLi = e.target.parentElement;
-        const index = taskLi.getAttribute('index');
-        allTasks.deleteTask(index);
-        localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
-        e.target.parentElement.remove();
-      }
-    });
+  }
+  if (e.target.classList.contains('edit-task-img-trash')) {
+    const taskLi = e.target.parentElement;
+    let index = taskLi.getAttribute('index');
+    index = parseInt(index, 10);
+    allTasks.deleteTask(index);
+    taskLi.remove();
+    for (let i = 0; i < allTasks.tasks.length; i += 1) {
+      allTasks.tasks[i].index = i + 1;
+    }
+    localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
   }
 });
