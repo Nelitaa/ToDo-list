@@ -4,6 +4,7 @@ import './style.css';
 
 const tasksList = document.querySelector('.tasks-list');
 const inputTask = document.querySelector('#input-task');
+
 class Task {
   constructor(index, description, completed = false) {
     this.index = index;
@@ -20,24 +21,50 @@ class Tasks {
     this.tasks.push(task);
   }
 
+  renderTasks() {
+    this.tasks.forEach(this.renderTask);
+  }
+
   renderTask(task) {
     const taskLi = document.createElement('li');
-    taskLi.textContent = `\u00a0  \u00a0 \u00a0 ${task.description}`;
+    taskLi.setAttribute('index', task.index);
     tasksList.appendChild(taskLi);
+
+    const taskDiv = document.createElement('div');
+    taskLi.appendChild(taskDiv);
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.className = 'checkbox';
-    taskLi.appendChild(checkbox);
+    taskDiv.appendChild(checkbox);
 
-    const move = document.createElement('img');
-    move.src = 'https://drive.google.com/uc?export=download&id=1sPrm0H-RE7O346HqzOGXcqp1-lyE2xC_';
-    taskLi.appendChild(move);
+    const inputText = document.createElement('input');
+    inputText.value = task.description;
+    inputText.setAttribute('disabled', 'true');
+    taskDiv.appendChild(inputText);
+
+    const editTaskImg = document.createElement('img');
+    editTaskImg.className = 'edit-task-img';
+    editTaskImg.src = 'https://drive.google.com/uc?export=download&id=1sPrm0H-RE7O346HqzOGXcqp1-lyE2xC_';
+    taskLi.appendChild(editTaskImg);
+
+    const editTaskImgTrash = document.createElement('img');
+    editTaskImgTrash.className = 'edit-task-img-trash';
+    editTaskImgTrash.style.display = 'none';
+    editTaskImgTrash.src = 'https://drive.google.com/uc?export=download&id=1FQtxnRA9DqZVonm55uyTS5Ee-CfNj7RK';
+    taskLi.appendChild(editTaskImgTrash);
+  }
+
+  deleteTask(index) {
+    this.tasks.splice(index - 1, 1);
   }
 }
+
 const init = () => {
   const allTasks = new Tasks();
-  allTasks.tasks.forEach((task) => allTasks.renderTask(task));
+  allTasks.renderTasks();
+  const editTaskImg = document.querySelector('.edit-task-img');
+  const editTaskImgTrash = document.querySelector('.edit-task-img-trash');
 
   inputTask.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
@@ -49,6 +76,23 @@ const init = () => {
       inputTask.value = '';
     }
   });
-  };
+
+  tasksList.addEventListener('click', (e) => {
+    if (e.target.classList.contains('edit-task-img')) {
+      editTaskImg.style.display = 'none';
+      editTaskImgTrash.style.display = 'block';
+
+      tasksList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('edit-task-img-trash')) {
+          const taskLi = e.target.parentElement;
+          const index = taskLi.getAttribute('index');
+          allTasks.deleteTask(index);
+          localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+          e.target.parentElement.remove();
+        }
+      });
+    }
+  });
+};
 
 init();

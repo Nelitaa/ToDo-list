@@ -30,6 +30,7 @@ p {
 
 input {
   border: none;
+  background-color: #fff;
 }
 
 #enter-icon {
@@ -39,11 +40,6 @@ input {
 ul {
   padding: 0;
   margin: 0;
-  list-style-type: square;
-}
-
-.checkbox {
-  position: absolute;
 }
 
 button {
