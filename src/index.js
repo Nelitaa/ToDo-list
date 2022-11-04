@@ -62,7 +62,7 @@ class Tasks {
   }
 }
 
-let allTasks = new Tasks();
+const allTasks = new Tasks();
 allTasks.renderTasks();
 
 inputTask.addEventListener('keypress', (e) => {
@@ -103,6 +103,7 @@ tasksList.addEventListener('click', (e) => {
     taskLi.remove();
     for (let i = 0; i < allTasks.tasks.length; i += 1) {
       allTasks.tasks[i].index = i + 1;
+      tasksList.children[i].setAttribute('index', i + 1);
     }
     localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
   }
