@@ -63,9 +63,6 @@ class Tasks {
 
 const allTasks = new Tasks();
 allTasks.renderTasks();
-const editTaskImg = document.querySelector('.edit-task-img');
-const editTaskImgTrash = document.querySelector('.edit-task-img-trash');
-const inputTextQS = document.querySelector('.input-text');
 
 inputTask.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') {
@@ -80,16 +77,20 @@ inputTask.addEventListener('keypress', (e) => {
 
 tasksList.addEventListener('click', (e) => {
   if (e.target.classList.contains('edit-task-img')) {
+    const parentEl = e.target.parentElement;
+    const inputText = parentEl.querySelector('.input-text');
+    const editTaskImg = e.target;
     editTaskImg.style.display = 'none';
+    const editTaskImgTrash = parentEl.querySelector('.edit-task-img-trash');
     editTaskImgTrash.style.display = 'block';
-    inputTextQS.removeAttribute('disabled');
+    inputText.removeAttribute('disabled');
 
-    inputTextQS.addEventListener('keypress', (event) => {
+    inputText.addEventListener('keypress', (event) => {
       if (event.key === 'Enter') {
         event.preventDefault();
         editTaskImg.style.display = 'block';
         editTaskImgTrash.style.display = 'none';
-        inputTextQS.setAttribute('disabled', 'true');
+        inputText.setAttribute('disabled', 'true');
       }
     });
 
