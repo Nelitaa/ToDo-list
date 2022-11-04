@@ -40,6 +40,7 @@ class Tasks {
 
     const inputText = document.createElement('input');
     inputText.value = task.description;
+    inputText.className = 'input-text';
     inputText.setAttribute('disabled', 'true');
     taskDiv.appendChild(inputText);
 
@@ -60,39 +61,46 @@ class Tasks {
   }
 }
 
-const init = () => {
-  const allTasks = new Tasks();
-  allTasks.renderTasks();
-  const editTaskImg = document.querySelector('.edit-task-img');
-  const editTaskImgTrash = document.querySelector('.edit-task-img-trash');
+const allTasks = new Tasks();
+allTasks.renderTasks();
+const editTaskImg = document.querySelector('.edit-task-img');
+const editTaskImgTrash = document.querySelector('.edit-task-img-trash');
+const inputTextQS = document.querySelector('.input-text');
 
-  inputTask.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const newTask = new Task(allTasks.tasks.length + 1, inputTask.value);
-      allTasks.addTask(newTask);
-      localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
-      allTasks.renderTask(newTask);
-      inputTask.value = '';
-    }
-  });
+inputTask.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const newTask = new Task(allTasks.tasks.length + 1, inputTask.value);
+    allTasks.addTask(newTask);
+    localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+    allTasks.renderTask(newTask);
+    inputTask.value = '';
+  }
+});
 
-  tasksList.addEventListener('click', (e) => {
-    if (e.target.classList.contains('edit-task-img')) {
-      editTaskImg.style.display = 'none';
-      editTaskImgTrash.style.display = 'block';
+tasksList.addEventListener('click', (e) => {
+  if (e.target.classList.contains('edit-task-img')) {
+    editTaskImg.style.display = 'none';
+    editTaskImgTrash.style.display = 'block';
+    inputTextQS.removeAttribute('disabled');
 
-      tasksList.addEventListener('click', (e) => {
-        if (e.target.classList.contains('edit-task-img-trash')) {
-          const taskLi = e.target.parentElement;
-          const index = taskLi.getAttribute('index');
-          allTasks.deleteTask(index);
-          localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
-          e.target.parentElement.remove();
-        }
-      });
-    }
-  });
-};
+    inputTextQS.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        editTaskImg.style.display = 'block';
+        editTaskImgTrash.style.display = 'none';
+        inputTextQS.setAttribute('disabled', 'true');
+      }
+    });
 
-init();
+    tasksList.addEventListener('click', (e) => {
+      if (e.target.classList.contains('edit-task-img-trash')) {
+        const taskLi = e.target.parentElement;
+        const index = taskLi.getAttribute('index');
+        allTasks.deleteTask(index);
+        localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+        e.target.parentElement.remove();
+      }
+    });
+  }
+});
