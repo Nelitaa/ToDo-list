@@ -54,10 +54,31 @@ tasksList.addEventListener('click', (e) => {
     }
     localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
   }
+
   if (e.target.classList.contains('checkbox')) {
     const index = e.target.parentElement.parentElement.getAttribute('index');
     const task = allTasks.tasks[index - 1];
-    task.completed = e.target.checked;
-    localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+    const inputCheckbox = e.target;
+    inputCheckbox.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        task.completed = true;
+      } else {
+        task.completed = false;
+      }
+      localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+    });
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('clear-all')) {
+    for (let i = 0; i < allTasks.tasks.length; i += 1) {
+      if (allTasks.tasks[i].completed === true) {
+        allTasks.deleteTask(i + 1);
+        tasksList.children[i].remove();
+        i -= 1;
+        localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+      }
+    }
   }
 });
