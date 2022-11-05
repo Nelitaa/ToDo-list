@@ -21,11 +21,13 @@ export default class Tasks {
     tasksList.appendChild(taskLi);
 
     const taskDiv = document.createElement('div');
+    taskDiv.className = 'checkbox-div';
     taskLi.appendChild(taskDiv);
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.className = 'checkbox';
+    checkbox.checked = task.completed;
     taskDiv.appendChild(checkbox);
 
     const inputText = document.createElement('input');

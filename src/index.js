@@ -54,4 +54,30 @@ tasksList.addEventListener('click', (e) => {
     }
     localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
   }
+
+  if (e.target.classList.contains('checkbox')) {
+    const index = e.target.parentElement.parentElement.getAttribute('index');
+    const task = allTasks.tasks[index - 1];
+    const inputCheckbox = e.target;
+    inputCheckbox.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        task.completed = true;
+      } else {
+        task.completed = false;
+      }
+      localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+    });
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('clear-all')) {
+    allTasks.tasks = allTasks.tasks.filter((task) => task.completed === false);
+    localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+    for (let i = 0; i < tasksList.children.length; i += 1) {
+      while (tasksList.children[i].children[0].children[0].checked) {
+        tasksList.children[i].remove();
+      }
+    }
+  }
 });
