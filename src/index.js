@@ -1,66 +1,9 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable max-classes-per-file */
+import Tasks from './TasksClass.js';
+import Task from './TaskClass.js';
 import './style.css';
 
 const tasksList = document.querySelector('.tasks-list');
 const inputTask = document.querySelector('#input-task');
-
-class Task {
-  constructor(index, description, completed = false) {
-    this.index = index;
-    this.description = description;
-    this.completed = completed;
-  }
-}
-class Tasks {
-  constructor() {
-    this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  }
-
-  addTask(task) {
-    this.tasks.push(task);
-  }
-
-  renderTasks() {
-    this.tasks.forEach(this.renderTask);
-  }
-
-  renderTask(task) {
-    const taskLi = document.createElement('li');
-    taskLi.setAttribute('index', task.index);
-    taskLi.className = 'task-item';
-    tasksList.appendChild(taskLi);
-
-    const taskDiv = document.createElement('div');
-    taskLi.appendChild(taskDiv);
-
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.className = 'checkbox';
-    taskDiv.appendChild(checkbox);
-
-    const inputText = document.createElement('input');
-    inputText.value = task.description;
-    inputText.className = 'input-text';
-    inputText.setAttribute('disabled', 'true');
-    taskDiv.appendChild(inputText);
-
-    const editTaskImg = document.createElement('img');
-    editTaskImg.className = 'edit-task-img';
-    editTaskImg.src = 'https://drive.google.com/uc?export=download&id=1sPrm0H-RE7O346HqzOGXcqp1-lyE2xC_';
-    taskLi.appendChild(editTaskImg);
-
-    const editTaskImgTrash = document.createElement('img');
-    editTaskImgTrash.className = 'edit-task-img-trash';
-    editTaskImgTrash.style.display = 'none';
-    editTaskImgTrash.src = 'https://drive.google.com/uc?export=download&id=1FQtxnRA9DqZVonm55uyTS5Ee-CfNj7RK';
-    taskLi.appendChild(editTaskImgTrash);
-  }
-
-  deleteTask(index) {
-    this.tasks.splice(index - 1, 1);
-  }
-}
 
 const allTasks = new Tasks();
 allTasks.renderTasks();
@@ -89,6 +32,10 @@ tasksList.addEventListener('click', (e) => {
     inputText.addEventListener('keypress', (event) => {
       if (event.key === 'Enter') {
         event.preventDefault();
+        const index = e.target.parentElement.getAttribute('index');
+        const task = allTasks.tasks[index - 1];
+        task.description = inputText.value;
+        localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
         editTaskImg.style.display = 'block';
         editTaskImgTrash.style.display = 'none';
         inputText.setAttribute('disabled', 'true');
