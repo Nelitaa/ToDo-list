@@ -54,4 +54,10 @@ tasksList.addEventListener('click', (e) => {
     }
     localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
   }
+  if (e.target.classList.contains('checkbox')) {
+    const index = e.target.parentElement.parentElement.getAttribute('index');
+    const task = allTasks.tasks[index - 1];
+    task.completed = e.target.checked;
+    localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+  }
 });
