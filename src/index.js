@@ -72,12 +72,11 @@ tasksList.addEventListener('click', (e) => {
 
 document.addEventListener('click', (e) => {
   if (e.target.classList.contains('clear-all')) {
-    for (let i = 0; i < allTasks.tasks.length; i += 1) {
-      if (allTasks.tasks[i].completed === true) {
-        allTasks.deleteTask(i + 1);
+    allTasks.tasks = allTasks.tasks.filter((task) => task.completed === false);
+    localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+    for (let i = 0; i < tasksList.children.length; i += 1) {
+      while (tasksList.children[i].children[0].children[0].checked) {
         tasksList.children[i].remove();
-        i -= 1;
-        localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
       }
     }
   }
