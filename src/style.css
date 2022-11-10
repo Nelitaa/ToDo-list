@@ -6,7 +6,6 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #fff;
   margin: 15%;
 }
 
@@ -15,12 +14,19 @@ img {
   height: 20px;
 }
 
+.background {
+  background-color: #fff;
+}
+
+.border {
+  border: 1px solid rgba(146, 143, 143, 0.188);
+}
+
 li,
 form,
 .title-toDo {
   display: flex;
   justify-content: space-between;
-  border: 1px solid rgba(146, 143, 143, 0.188);
   padding: 2%;
 }
 
@@ -30,7 +36,10 @@ p {
 
 input {
   border: none;
-  background-color: #fff;
+}
+
+input:focus {
+  outline: none;
 }
 
 #enter-icon {
@@ -43,8 +52,8 @@ ul {
 }
 
 button {
-  border: 1px solid rgba(146, 143, 143, 0.188);
   padding: 2%;
   color: darkgray;
   font-size: medium;
+  cursor: pointer;
 }

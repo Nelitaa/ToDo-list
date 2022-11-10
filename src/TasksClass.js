@@ -33,6 +33,7 @@ export default class Tasks {
     const inputText = document.createElement('input');
     inputText.value = task.description;
     inputText.className = 'input-text';
+    inputText.classList.add('background');
     inputText.setAttribute('disabled', 'true');
     taskDiv.appendChild(inputText);
 
@@ -50,5 +51,21 @@ export default class Tasks {
 
   deleteTask(index) {
     this.tasks.splice(index - 1, 1);
+  }
+
+  updateTask(index, description) {
+    this.tasks[index - 1].description = description;
+  }
+
+  updateCompleted(index, completed) {
+    this.tasks[index - 1].completed = completed;
+  }
+
+  deleteAllTasks() {
+    this.tasks = this.tasks.filter((task) => task.completed === false);
+  }
+
+  updateLocalStorage() {
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
   }
 }

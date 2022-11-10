@@ -8,22 +8,23 @@ const inputTask = document.querySelector('#input-task');
 const allTasks = new Tasks();
 allTasks.renderTasks();
 
-inputTask.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
+inputTask.addEventListener('keypress', (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
     const newTask = new Task(allTasks.tasks.length + 1, inputTask.value);
     allTasks.addTask(newTask);
-    localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+    allTasks.updateLocalStorage();
     allTasks.renderTask(newTask);
     inputTask.value = '';
   }
 });
 
-tasksList.addEventListener('click', (e) => {
-  if (e.target.classList.contains('edit-task-img')) {
-    const parentEl = e.target.parentElement;
+tasksList.addEventListener('click', (event) => {
+  if (event.target.classList.contains('edit-task-img')) {
+    event.preventDefault();
+    const parentEl = event.target.parentElement;
     const inputText = parentEl.querySelector('.input-text');
-    const editTaskImg = e.target;
+    const editTaskImg = event.target;
     editTaskImg.style.display = 'none';
     const editTaskImgTrash = parentEl.querySelector('.edit-task-img-trash');
     editTaskImgTrash.style.display = 'block';
@@ -32,18 +33,18 @@ tasksList.addEventListener('click', (e) => {
     inputText.addEventListener('keypress', (event) => {
       if (event.key === 'Enter') {
         event.preventDefault();
-        const index = e.target.parentElement.getAttribute('index');
-        const task = allTasks.tasks[index - 1];
-        task.description = inputText.value;
-        localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+        const index = event.target.parentElement.parentElement.getAttribute('index');
+        const description = inputText.value;
+        allTasks.updateTask(index, description);
+        allTasks.updateLocalStorage();
         editTaskImg.style.display = 'block';
         editTaskImgTrash.style.display = 'none';
         inputText.setAttribute('disabled', 'true');
       }
     });
   }
-  if (e.target.classList.contains('edit-task-img-trash')) {
-    const taskLi = e.target.parentElement;
+  if (event.target.classList.contains('edit-task-img-trash')) {
+    const taskLi = event.target.parentElement;
     let index = taskLi.getAttribute('index');
     index = parseInt(index, 10);
     allTasks.deleteTask(index);
@@ -52,24 +53,23 @@ tasksList.addEventListener('click', (e) => {
       allTasks.tasks[i].index = i + 1;
       tasksList.children[i].setAttribute('index', i + 1);
     }
-    localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+    allTasks.updateLocalStorage();
   }
-});
-
-const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-checkboxes.forEach((checkbox) => {
-  checkbox.addEventListener('change', (e) => {
-    const index = e.target.parentElement.parentElement.getAttribute('index');
-    const task = allTasks.tasks[index - 1];
-    task.completed = e.target.checked;
-    localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', (event) => {
+      const index = event.target.parentElement.parentElement.getAttribute('index');
+      const completed = event.target.checked;
+      allTasks.updateCompleted(index, completed);
+      allTasks.updateLocalStorage();
+    });
   });
 });
 
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('clear-all')) {
-    allTasks.tasks = allTasks.tasks.filter((task) => task.completed === false);
-    localStorage.setItem('tasks', JSON.stringify(allTasks.tasks));
+document.addEventListener('click', (event) => {
+  if (event.target.classList.contains('clear-all')) {
+    allTasks.deleteAllTasks();
+    allTasks.updateLocalStorage();
     for (let i = 0; i < tasksList.children.length; i += 1) {
       while (tasksList.children[i].children[0].children[0].checked) {
         tasksList.children[i].remove();
