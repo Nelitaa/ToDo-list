@@ -20,4 +20,8 @@ describe('Tasks', () => {
     tasks.updateCompleted(1, true);
     expect(tasks.tasks[0].completed).toBe(true);
   });
+  test('should clear all tasks', () => {
+    tasks.deleteAllTasks();
+    expect(tasks.tasks).toHaveLength(0);
+  });
 });
