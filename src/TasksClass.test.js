@@ -16,4 +16,8 @@ describe('Tasks', () => {
     tasks.updateTask(1, 'test2');
     expect(tasks.tasks[0].description).toBe('test2');
   });
+  test('should update the completed status of a task', () => {
+    tasks.updateCompleted(1, true);
+    expect(tasks.tasks[0].completed).toBe(true);
+  });
 });
